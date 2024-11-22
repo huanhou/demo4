@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Currency Converter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="status"></div>
+    <form id="convertForm">
+      <input type="number" id="money" required />
+      <select id="currency">
+        <option value="">Select currency</option>
+      </select>
+      <button type="submit">Convert</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+      const API_URL = "https://open.er-api.com/v6/latest/USD";
+      const statusDiv = document.getElementById("status");
+      const currencyDropdown = document.getElementById("currency");
+      const form = document.getElementById("convertForm");
+      const moneyInput = document.getElementById("money");
+      const resultDiv = document.getElementById("result");
+
+      async function loadCurrencies() {
+        try {
+          const response = await fetch(API_URL);
+          const curr = await response.json();
+          const rates = curr.rates;
+
+          for (const one in rates) {
+            const option = document.createElement("option");
+            option.value = rates[one];
+            option.textContent = one;
+            currencyDropdown.appendChild(option);
+          }
+          statusDiv.textContent = "Currencies loaded successfully.";
+        } catch {
+          statusDiv.textContent = "Failed to load currencies.";
+          statusDiv.style.color = "red";
+        }
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const amount = parseFloat(moneyInput.value);
+        const rate = parseFloat(currencyDropdown.value);
+
+        if (!amount || !rate) {
+          statusDiv.textContent = "Please enter a valid amount and currency.";
+          statusDiv.style.color = "red";
+          return;
+        }
+
+        const converted = (amount * rate).toFixed(2);
+        resultDiv.textContent = `Converted Amount: ${converted}`;
+        statusDiv.textContent = "Conversion successful.";
+        statusDiv.style.color = "green";
+      });
+
+      loadCurrencies();
+    </script>
+  </body>
+</html>

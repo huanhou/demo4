@@ -1,0 +1,23 @@
+form {
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+}
+
+input {
+  padding: 10px;
+}
+button {
+  padding: 20px;
+  background-color: cadetblue;
+}
+
+#status {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+#result {
+  margin-top: 10px;
+  font-size: 18px;
+}
